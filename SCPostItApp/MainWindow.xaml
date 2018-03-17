@@ -1,0 +1,137 @@
+﻿<Window x:Class="SC.PostItApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModels="clr-namespace:SC.PostItApp.ViewModels"
+        Title="SharpCloud - Post-it Notes App v1.0" Height="700" Width="800"
+        Background="#333333" Foreground="#00AFFC" FontSize="16" Closing="Window_Closing">
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
+    <Grid >
+        <Grid ZIndex="2" Visibility="{Binding ShowStatus}">
+            <Border Background="Black" Opacity=".8"></Border>
+            <StackPanel VerticalAlignment="Center" >
+                <Image Source="{Binding Image}" Height="200" Width="200" Visibility="{Binding ShowImage}" />
+                <TextBlock Foreground="#00AFFC" FontSize="20" Text="{Binding Status}" TextWrapping="Wrap" Margin="30" HorizontalAlignment="Center"></TextBlock>
+                <Button Click="Button_ClickCancel" Content=" Cancel " Background="#FF00AFFC" Width="100" Foreground="White"/>
+            </StackPanel>
+        </Grid>
+        <TabControl Background="#333333" x:Name="mainTab" >
+            <TabControl.Resources>
+                <Style TargetType="TabControl">
+                    <Setter Property="IsTabStop" Value="False"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="#404040"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+                <Style TargetType="TabItem">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Grid x:Name="gdBorder" Background="#333333">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Name="Border" BorderThickness="1,1,1,0" CornerRadius="0" Margin="2,0" Height="30">
+                                            <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                ContentSource="Header" Margin="10,2"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <Border x:Name="selectedBorder" Height="2" VerticalAlignment="Bottom" Background="#FF00AFFC"></Border>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="selectedBorder" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="gdBorder" Property="Background" Value="#333333" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="selectedBorder" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="gdBorder" Property="Background" Value="#111111" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="About Post-It App" >
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                        <Image Source="Images/post-it.png" Width="200" />
+                        <TextBlock Text="with" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" FontSize="30"/>
+                        <Image Source="Images/logo_home.png" Width="200" />
+                    </StackPanel>
+                    <Rectangle Fill="White" Height="1" Margin="10"/>
+                    <TextBlock TextWrapping="Wrap" Margin="20,10" Text="Turn your static workshop content into dymanic, living, digital documents." Foreground="White" FontSize="20" />
+                    <TextBlock TextWrapping="Wrap" Margin="20,10" Text="This application works best with the Post-It Plus application for iPhone/iPad.  " Foreground="White" FontSize="20" />
+                    <TextBlock TextWrapping="Wrap" Margin="20,10,20,10" Text="Follow these simple steps to get started:" Foreground="White" FontSize="20" />
+                    <TextBlock TextWrapping="Wrap" Margin="35,5" Text="1. Download and use the Post-It Plus app (only for iPhone or iPad) to convert your Post-It notes to an Excel spreadsheet." Foreground="White" FontSize="18" />
+                    <TextBlock TextWrapping="Wrap" Margin="35,5" Text="2. (optional) Edit the Excel document to annotate the images and put them into groups." Foreground="White" FontSize="18" />
+                    <TextBlock TextWrapping="Wrap" Margin="35,5" Text="3. Fill in your details and sit back while your data is uploaded to your SharpCloud." Foreground="White" FontSize="18" />
+                    <TextBlock TextWrapping="Wrap" Margin="35,5" Text="4. Use the power of SharpCloud to organise and share your ideas." Foreground="White" FontSize="18" />
+
+                    <Button  Margin="40" Height="90" Click="Button_ClickVideo" Background="Transparent" Width="400">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Images/play.png" Margin="10" />
+                            <TextBlock Text="Watch a video" VerticalAlignment="Center" Margin="20,0" FontSize="30"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </TabItem>
+
+            <TabItem Header="SharpCloud Credentials" >
+                <StackPanel Grid.Column="1" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Width="100" Text="Server:" Foreground="#FF00AFFC"></TextBlock>
+                        <TextBox Width="300" Text="{Binding Url, Mode=TwoWay}" x:Name="tbUrl" ></TextBox>
+                        <TextBlock Margin="10,0"><Hyperlink Foreground="#FF00AFFC" Click="Hyperlink_OnClick"> Proxy</Hyperlink></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Width="100" Text="Username:" Foreground="#FF00AFFC"></TextBlock>
+                        <TextBox Width="300" Text="{Binding UserName, Mode=TwoWay}" x:Name="tbUsername" ></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Width="100" Text="Password:" Foreground="#FF00AFFC"></TextBlock>
+                        <PasswordBox Width="300"  x:Name="tbPassword" ></PasswordBox>
+                    </StackPanel>
+                    <Grid >
+                        <CheckBox Foreground="#FF00AFFC" IsChecked="{Binding RememberPassword}" Margin="105,0">Remember password</CheckBox>
+                        <Button HorizontalAlignment="Right" Content=" Clear " Margin="5,0"  Background="#00AFFC" Foreground="White" Click="ClickClearPassword"/>
+                    </Grid>
+                    <Button Content="Save and validate" Width="300" HorizontalAlignment="Left" Margin="105,5,5,5" Background="#00AFFC" Foreground="White"  Click="SaveAndValidateCLick"></Button>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Add Post-Its Now" >
+
+                <Grid Margin="30" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="199*"/>
+                        <ColumnDefinition Width="275*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="90"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Excel file location: " Foreground="#FF00AFFC" HorizontalAlignment="Right" Grid.ColumnSpan="2" Margin="0,0,197.586,0" ></TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="0" x:Name = "tbFile" Text="" Height="50" TextWrapping="Wrap" Grid.ColumnSpan="3" Margin="0,0,19.333,0"></TextBox>
+                    <Button Grid.Column="2" Grid.Row="0" Content="..."  VerticalAlignment="Top" Width="20"  Click="ButtonBase_OnClick" Grid.ColumnSpan="2" Margin="274.414,0,0.333,0"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="StoryID / URL: " Foreground="#FF00AFFC"  HorizontalAlignment="Right" Margin="0,0,0,59.333" Grid.RowSpan="2" ></TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="2" x:Name = "tbStoryID" Text="" LostFocus="tbStoryID_LostFocus" Grid.ColumnSpan="3" Margin="0,0,19.333,59.333" Grid.RowSpan="2"></TextBox>
+                    <Button Grid.Column="2" Grid.Row="2" Content="..."  Click="BrowseStory" Width="20" Grid.ColumnSpan="2" Margin="274.414,0,0.333,0.333"/>
+
+                    <Button Grid.Column="1" Grid.Row="3" Margin="5,14.667,5.333,15.333" Background="#FF00AFFC" Foreground="White"  Height="30" Content="Add post-its"  Click="ClickButtonPostIts" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
